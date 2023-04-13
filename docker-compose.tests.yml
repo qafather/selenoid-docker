@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  tests:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Testsfile
+    container_name: tests
+    network_mode: host
