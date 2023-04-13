@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  selenoid:
+    image: aerokube/selenoid:latest-release
+    container_name: selenoid
+    network_mode: bridge
+    ports:
+      - "4444:4444"
+    volumes:
+      - "./config/selenoid:/etc/selenoid:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: ["-limit=4", "-capture-driver-logs", "-max-timeout=0h5m0s"]
+
+  selenoid-ui:
+    platform: linux/amd64
+    image: aerokube/selenoid-ui:latest-release
+    container_name: selenoid-ui
+    network_mode: bridge
+    ports:
+      - "8080:8080"
+    links:
+      - selenoid
+    depends_on:
+      - selenoid
+    command: ["--selenoid-uri", "http://selenoid:4444"]
